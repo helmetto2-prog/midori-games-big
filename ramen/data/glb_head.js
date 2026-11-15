@@ -1,0 +1,1 @@
+self.GLB_INJ = {};
