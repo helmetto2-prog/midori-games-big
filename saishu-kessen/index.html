@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>最終決戦！ v12</title>
+<title>最終決戦！ v13</title>
 <style>
   *{box-sizing:border-box;font-family:"Segoe UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;}
   html,body{margin:0;height:100%;overflow:hidden;background:#0a1428;}
@@ -23,19 +23,72 @@
   body.playing #barBot{transform:translateY(0);}
 
   /* ローディング & スタート */
-  #loading{position:fixed;inset:0;background:linear-gradient(180deg,#16224a,#0a1428);z-index:100;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#fff;}
-  #loading h1{font-size:min(9vw,54px);margin:0;letter-spacing:.15em;font-weight:900;
-    text-shadow:0 4px 24px rgba(90,140,255,.55);}
-  #loading .sub{font-size:min(4vw,17px);opacity:.85;letter-spacing:.08em;}
-  #prog{width:min(70vw,420px);height:12px;border-radius:8px;background:rgba(255,255,255,.15);overflow:hidden;}
+  /* v13：タイトル画面を作り直し（青と赤のぶつかり合い・ななめの帯・稲光・ふちどりのロゴ・大きなＶＳ・光るスタートボタン） */
+  #loading{position:fixed;inset:0;z-index:100;overflow:hidden;padding:0 14px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2.2vh,18px);color:#fff;text-align:center;
+    background:linear-gradient(105deg,#06153f 0%,#12379c 30%,#1d57d8 46%,#0a0a18 49.4%,#0a0a18 50.6%,#d8301d 54%,#96151a 70%,#3a060c 100%);}
+  #loading>*{position:relative;z-index:2;}
+  #loading::before{content:'';position:absolute;inset:-25%;z-index:1;pointer-events:none;
+    background:repeating-linear-gradient(105deg,rgba(255,255,255,0) 0 46px,rgba(255,255,255,.06) 46px 60px,rgba(255,255,255,0) 60px 132px,rgba(0,0,0,.15) 132px 150px);
+    animation:fbSlide 6s linear infinite;}
+  #loading::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 44%,rgba(255,236,170,.24) 0%,rgba(255,236,170,0) 36%),
+      radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 46%,rgba(0,0,6,.74) 100%);}
+  @keyframes fbSlide{to{transform:translate(144.9px,38.8px);}}
+  /* まん中の稲光（青と赤のさかい目に沿って走る） */
+  #loading .fbolt{position:absolute;z-index:1;left:50%;top:-4%;width:40vh;height:108%;margin-left:-20vh;pointer-events:none;
+    filter:drop-shadow(0 0 10px rgba(255,240,150,.95)) drop-shadow(0 0 28px rgba(255,180,60,.7));
+    animation:fbBolt 3.2s linear infinite;}
+  #loading .fbolt i{position:absolute;inset:0;background:linear-gradient(180deg,#fff 0%,#fff7b8 45%,#ffd23c 100%);
+    clip-path:polygon(72% 0,80% 0,60% 34%,72% 34%,44% 68%,55% 68%,17% 100%,43% 60%,32% 60%,55% 27%,44% 27%);}
+  @keyframes fbBolt{0%,100%{opacity:.5;}6%{opacity:1;}9%{opacity:.25;}13%{opacity:.95;}22%{opacity:.5;}58%{opacity:.45;}61%{opacity:1;}66%{opacity:.4;}}
+  #loading .feng{font-size:clamp(10px,2.4vw,15px);font-weight:800;letter-spacing:.5em;margin-left:.5em;color:#ffe9b0;
+    text-shadow:0 0 12px rgba(255,190,90,.8),0 2px 6px rgba(0,0,0,.7);animation:fbFade .6s ease-out both;}
+  #loading .feng::before,#loading .feng::after{content:'';display:inline-block;vertical-align:middle;width:clamp(22px,8vw,70px);height:2px;margin:0 .9em 0 0;
+    background:linear-gradient(90deg,transparent,#ffe9b0);}
+  #loading .feng::after{margin:0 0 0 .4em;background:linear-gradient(90deg,#ffe9b0,transparent);}
+  /* ロゴ：::before＝濃いふちと青赤の光／::after＝細い白ふち／.lgt＝金から赤へのグラデーションの字（重ねる順は z-index で固定） */
+  #loading h1,#loading h1 *{font-family:"Yu Gothic UI","Hiragino Sans","Meiryo",sans-serif;}
+  #loading h1{margin:0;font-size:clamp(40px,min(15.5vw,20vh),108px);font-weight:900;line-height:1.2;white-space:nowrap;
+    animation:fbLogoIn .7s .1s cubic-bezier(.2,1.4,.4,1) both;}
+  #loading h1 .lg{position:relative;display:inline-block;isolation:isolate;}
+  #loading h1 .lgt{position:relative;background:linear-gradient(180deg,#fffde6 0%,#ffe45c 34%,#ff9a1f 66%,#d92a14 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+  #loading h1 .lg::before,#loading h1 .lg::after{content:attr(data-t);position:absolute;left:0;top:0;white-space:nowrap;}
+  #loading h1 .lg::before{z-index:-2;color:#12061c;-webkit-text-fill-color:#12061c;-webkit-text-stroke:.2em #12061c;
+    filter:drop-shadow(-.07em 0 .16em rgba(70,140,255,.95)) drop-shadow(.07em 0 .16em rgba(255,70,40,.95)) drop-shadow(0 .09em 0 rgba(0,0,0,.6));}
+  #loading h1 .lg::after{z-index:-1;color:#fff;-webkit-text-fill-color:#fff;-webkit-text-stroke:.07em #fff;}
+  @keyframes fbLogoIn{from{opacity:0;transform:skewX(-7deg) scale(2.3);}to{opacity:1;transform:skewX(-7deg) scale(1);}}
+  @keyframes fbFade{from{opacity:0;}to{opacity:1;}}
+  /* 両軍の札と大きなＶＳ */
+  #loading .fvs{display:flex;align-items:center;justify-content:center;gap:clamp(6px,2.4vw,26px);}
+  #loading .ftm{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:clamp(104px,26vw,220px);
+    padding:6px clamp(8px,2vw,20px) 7px;border-radius:12px;border:2px solid rgba(255,255,255,.88);
+    font-weight:900;font-size:clamp(13px,3.4vw,23px);letter-spacing:.06em;white-space:nowrap;
+    text-shadow:0 2px 0 rgba(0,0,0,.45);box-shadow:0 5px 16px rgba(0,0,0,.45);}
+  #loading .ftm b{font-size:1.45em;font-weight:400;letter-spacing:.1em;}
+  #loading .ftm.fa{background:linear-gradient(180deg,#4f8dff,#1a3fb4);animation:fbInL .55s .45s cubic-bezier(.2,1.3,.4,1) both;}
+  #loading .ftm.fb{background:linear-gradient(180deg,#ff6a4a,#b4161c);animation:fbInR .55s .45s cubic-bezier(.2,1.3,.4,1) both;}
+  #loading .fvt{font-size:clamp(34px,min(11vw,13vh),78px);font-weight:900;font-style:italic;line-height:1;color:#ffe45c;
+    text-shadow:2px 2px 0 #3a0d00,-2px 2px 0 #3a0d00,2px -2px 0 #3a0d00,-2px -2px 0 #3a0d00,0 4px 0 #3a0d00,0 0 22px rgba(255,200,60,.95);
+    animation:fbVsIn .5s .85s cubic-bezier(.3,1.9,.5,1) both,fbVsPulse 1.6s 1.5s ease-in-out infinite;}
+  @keyframes fbInL{from{opacity:0;transform:translateX(-60vw) skewX(-7deg);}to{opacity:1;transform:skewX(-7deg);}}
+  @keyframes fbInR{from{opacity:0;transform:translateX(60vw) skewX(-7deg);}to{opacity:1;transform:skewX(-7deg);}}
+  @keyframes fbVsIn{from{opacity:0;transform:scale(3.2) rotate(-14deg);}to{opacity:1;transform:scale(1) rotate(-6deg);}}
+  @keyframes fbVsPulse{0%,100%{transform:scale(1) rotate(-6deg);}50%{transform:scale(1.14) rotate(-6deg);}}
+  #loading .sub{font-size:clamp(13px,3.6vw,19px);font-weight:800;color:#ffe9b0;letter-spacing:.1em;
+    text-shadow:0 0 12px rgba(255,190,90,.6),0 2px 6px rgba(0,0,0,.7);animation:fbFade .6s 1.1s ease-out both;}
+  #prog{width:min(70vw,420px);height:12px;border-radius:8px;background:rgba(0,0,0,.45);overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.4);}
   #progFill{height:100%;width:0%;border-radius:8px;transition:width .3s;
-    background:linear-gradient(90deg,#5b8cff,#8fd3ff);}
-  #progTxt{font-size:13px;opacity:.8;}
-  #startBtn{display:none;border:0;border-radius:40px;padding:16px 52px;font-size:min(6vw,26px);font-weight:800;
-    color:#fff;background:linear-gradient(135deg,#5b8cff,#3e6df0);cursor:pointer;letter-spacing:.1em;
-    box-shadow:0 8px 30px rgba(80,130,255,.5);transition:.15s;}
+    background:linear-gradient(90deg,#5b8cff,#fff3b0 50%,#ff5a3c);}
+  #progTxt{font-size:13px;font-weight:700;opacity:.9;text-shadow:0 1px 4px rgba(0,0,0,.7);}
+  #startBtn{display:none;border:3px solid #fff;border-radius:44px;padding:16px 56px;font-size:clamp(21px,6vw,30px);font-weight:900;
+    color:#4a1400;background:linear-gradient(180deg,#fff2a0,#ffc02e 55%,#ff8a1e);cursor:pointer;letter-spacing:.1em;
+    box-shadow:0 6px 0 #a3420a,0 12px 30px rgba(0,0,0,.5);transition:transform .15s;animation:fbGlow 1.6s ease-in-out infinite;}
   #startBtn:hover{transform:scale(1.06);}
+  #startBtn:active{transform:scale(.96);}
+  @keyframes fbGlow{50%{box-shadow:0 6px 0 #a3420a,0 12px 40px rgba(255,190,60,.95),0 0 0 10px rgba(255,255,255,.22);}}
 
   /* タイトルカード類 */
   .card{position:fixed;left:0;right:0;text-align:center;z-index:30;pointer-events:none;
@@ -124,8 +177,11 @@
 <div id="barBot" class="bar"></div>
 
 <div id="loading">
-  <h1>最終決戦！</h1>
-  <div class="sub">🐶🐰 いぬうさぎ軍　ＶＳ　ねこきつね軍 🐱🦊　― 勝つのはどっちだ！？ ―</div>
+  <div class="fbolt"><i></i></div>
+  <div class="feng">THE FINAL BATTLE</div>
+  <h1><span class="lg" data-t="最終決戦！"><span class="lgt">最終決戦！</span></span></h1>
+  <div class="fvs"><div class="ftm fa"><b>🐶🐰</b>いぬうさぎ軍</div><div class="fvt">VS</div><div class="ftm fb"><b>🐱🦊</b>ねこきつね軍</div></div>
+  <div class="sub">― 勝つのはどっちだ！？ ―</div>
   <div id="prog"><div id="progFill"></div></div>
   <div id="progTxt">モデル準備中…</div>
   <button id="startBtn">▶ ＰＶスタート</button>
