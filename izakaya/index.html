@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>居酒屋繁盛記 v01 — 限界利益で学ぶ居酒屋経営</title>
+<title>居酒屋繁盛記 v02 — 限界利益で学ぶ居酒屋経営</title>
 <style>
 :root{
   --bg:#14100c; --panel:#241c12; --panel2:#332818; --line:#57452c;
@@ -40,6 +40,17 @@ button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;color:#
 #title-logo{font-size:min(13vw,64px);font-weight:900;color:#fff;
   text-shadow:0 0 18px rgba(255,90,30,.9),0 4px 0 #6a1d00,0 8px 24px #000;letter-spacing:.08em}
 #title-logo small{display:block;font-size:min(4vw,20px);color:var(--accent2);letter-spacing:.3em;margin-bottom:4px}
+/* v02：タイトル画面を作り直し（ふちどり＋金のグラデーションのロゴ・光る開業ボタン・説明は読みやすい札に） */
+#title-logo{text-shadow:none;animation:tlIn .9s cubic-bezier(.2,1.5,.4,1) both;line-height:1.15}
+#title-logo small{font-weight:900;color:#fff;background:linear-gradient(90deg,#c0281c,#e8541e);display:inline-block;padding:.25em 1.1em .25em 1.4em;border-radius:999px;border:2px solid #ffe2a8;letter-spacing:.3em;box-shadow:0 4px 14px rgba(0,0,0,.6);margin-bottom:10px;text-shadow:0 1px 2px rgba(80,10,0,.8)}
+#title-logo .tl{position:relative;display:block;font-size:min(calc(84vw / (var(--n) * 1.07)),84px);letter-spacing:.06em;white-space:nowrap}
+#title-logo .tl::before{content:attr(data-t);position:absolute;left:0;right:0;top:0;-webkit-text-fill-color:#2a0d02;color:#2a0d02;-webkit-text-stroke:.2em #2a0d02;filter:drop-shadow(0 0 .25em rgba(255,110,30,.95)) drop-shadow(0 .1em .15em #000)}
+#title-logo .tl::after{content:attr(data-t);position:absolute;left:0;right:0;top:0;-webkit-text-fill-color:#fff;color:#fff;-webkit-text-stroke:.07em #fff3d0}
+#title-logo .tlt{position:relative;z-index:1;background:linear-gradient(180deg,#fffbe0 0%,#ffd84f 42%,#ff8a1e 78%,#c2410c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#title-sub{background:rgba(18,9,5,.82);border:1px solid rgba(255,209,102,.55);font-size:14px;line-height:1.7;color:#f5e8d5;box-shadow:0 6px 18px rgba(0,0,0,.5);max-width:560px}
+#bt-start{font-size:22px;font-weight:900;padding:14px 46px;border-radius:999px;border:3px solid #fff3d0;box-shadow:0 5px 0 #8a3a00,0 10px 24px rgba(0,0,0,.5);animation:tlGlow 1.8s ease-in-out infinite}
+@keyframes tlIn{from{opacity:0;transform:translateY(-26px) scale(1.15)}to{opacity:1;transform:none}}
+@keyframes tlGlow{50%{box-shadow:0 5px 0 #8a3a00,0 10px 34px rgba(255,150,40,.95),0 0 0 8px rgba(255,220,150,.25)}}
 #title-sub{background:rgba(18,9,5,.68);border:1px solid var(--line);border-radius:12px;padding:8px 16px;font-size:13px;color:var(--sub)}
 #title-credit{position:absolute;bottom:8px;left:0;right:0;font-size:10px;color:#cbb58f;z-index:3;text-shadow:0 1px 3px #000;padding:0 8px}
 #scr-open{align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#3a2210,#140b05)}
@@ -143,7 +154,7 @@ button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;color:#
 <div class="scr on" id="scr-title">
   <div id="title-bg"></div><div id="title-veil"></div>
   <div id="title-inner">
-    <div id="title-logo"><small>限界利益で学ぶ 居酒屋経営</small>居酒屋繁盛記</div>
+    <div id="title-logo"><small>限界利益で学ぶ 居酒屋経営</small><span class="tl" style="--n:6" data-t="居酒屋繁盛記"><span class="tlt">居酒屋繁盛記</span></span></div>
     <div id="title-sub">脱サラ資金500万円で赤提灯の店を開業。繁盛店ランキング1位を目指せ！<br>目安は3年（36ヶ月）。現金が尽きたら倒産…！<br>🎲 名物「ちんちろサービス」で店を盛り上げろ！</div>
     <button class="btn" id="bt-start">🏮 開業する</button>
     <button class="btn gray" id="bt-continue" style="display:none">つづきから</button>
